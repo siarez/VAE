@@ -2,7 +2,7 @@ import torch
 from torch.optim import Adam
 
 pz_size = 30
-image_size = 28*28
+image_size = 28 * 28
 
 x = torch.randn(image_size)
 loss_func = torch.nn.MSELoss()
@@ -30,16 +30,12 @@ class VAE(torch.nn.Module):
 
 
 # normal distribution definition
-
-
 input_var = torch.autograd.Variable(x)
-
 vae = VAE()
-opim = Adam(vae.parameters(), lr=0.001, weight_decay=0.001)
-
-output = vae(input_var)
-loss = loss_func(output, input_var)
-loss.backward()
-opim.step()
+opim = Adam(vae.parameters(), lr=0.001, weight_decay=0.001)  # lr: learning rate, weight decay: ?
+output = vae(input_var)  # forward pass
+loss = loss_func(output, input_var)  # calculate loss
+loss.backward()  # back propagate loss to calculate the deltas (the "gradient")
+opim.step()  # use the learning rates and the gradient to update parameters
 
 print(output)

@@ -2,8 +2,9 @@ import torch
 from torch.optim import Adam
 from sklearn.datasets import fetch_mldata
 from tqdm import tqdm
+from logger import Logger
 
-pz_size = 30
+pz_size = 12
 image_size = 28 * 28
 
 x = torch.randn(image_size)
@@ -45,11 +46,13 @@ def train(data_var, epochs=5):
             output = vae(data_var[j][:])  # forward pass
             loss = loss_func(output, data_var[j][:])  # calculate loss
             loss_trace[i][j] = loss.data[0]
+            logger.scalar_summary("loss", loss.data[0], i + 1)
             loss.backward()  # back propagate loss to calculate the deltas (the "gradient")
             optim.step()  # use the learning rates and the gradient to update parameters
-    print("loss.data: {}".format(loss.data))
     return loss_trace
 
+
+logger = Logger("./logs")
 
 vae = VAE()
 optim = Adam(vae.parameters(), lr=0.001, weight_decay=0.001)  # lr: learning rate, weight decay: ?
@@ -57,4 +60,3 @@ mnist_tensor = _prepare_data()
 input_var = torch.autograd.Variable(mnist_tensor)
 trace = train(data_var=input_var)
 # normal distribution definition
-

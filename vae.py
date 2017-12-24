@@ -57,7 +57,7 @@ def train(data_var, epochs=5):
 logger = Logger("./logs")
 
 vae = VAE()
-optim = Adam(vae.parameters(), lr=0.001, weight_decay=0.001)  # lr: learning rate, weight decay: ?
+optim = Adam(vae.parameters(), lr=0.00001, weight_decay=0.001)  # lr: learning rate, weight decay: ?
 mnist_tensor = _prepare_data()
 input_var = torch.autograd.Variable(mnist_tensor)
 trace = train(data_var=input_var)

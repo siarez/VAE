@@ -16,6 +16,7 @@ class VAE(torch.nn.Module):
         super(VAE, self).__init__()
         # Input output Layer definitions
         self.input_layer = torch.nn.Linear(image_size, pz_size)
+        self.activation_layer = torch.nn.Sigmoid()
         self.output_layer = torch.nn.Linear(int(pz_size / 2), image_size)
 
     def forward(self, x):
@@ -29,12 +30,13 @@ class VAE(torch.nn.Module):
         self.z = torch.mul(normal_sample, sigma) + mu
 
         # Calculating output
-        return self.output_layer(self.z)
+        return self.activation_layer(self.output_layer(self.z))
 
 
 def _prepare_data():
     mnist = fetch_mldata('MNIST original', data_home='./')
     mnist_tensor = torch.ByteTensor(mnist.data).type(torch.FloatTensor)
+    mnist_tensor = mnist_tensor / 255  # normalize
     print(mnist_tensor.shape)
     return mnist_tensor
 

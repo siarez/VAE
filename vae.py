@@ -183,11 +183,11 @@ mnist_dataset = _prepare_data()
 train(data_set=mnist_dataset)
 vae.save_json()
 # Get some sample images and their z representation for the blog
-z_representaions = []
+z_representations = []
 for digit in range(0, 10):
     image = mnist_dataset.get_sample_digit(digit)
     image.unsqueeze_(0)
     output, mu, logvar = vae(torch.autograd.Variable(image))
-    z_representaions.append(mu.data.numpy().tolist()[0])
-print(json.dumps(z_representaions))
+    z_representations.append(mu.data.numpy().tolist()[0])
+print(json.dumps(z_representations))
 
